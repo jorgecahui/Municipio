@@ -1,0 +1,70 @@
+server:
+  port: 9090
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka
+  instance:
+    hostname: localhost
+
+spring:
+  application:
+    name: ms-gateway-server
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        - id: ms-persona
+          uri: lb://ms-persona
+          predicates:
+            - Path=/api/personas/**
+
+        - id: ms-documento
+          uri: lb://ms-documento
+          predicates:
+            - Path=/api/documentos/**
+
+        - id: ms-tramite
+          uri: lb://ms-tramite
+          predicates:
+            - Path=/api/tramites/**
+
+        - id: ms-oficina
+          uri: lb://ms-oficina
+          predicates:
+            - Path=/api/oficinas/**
+
+        - id: ms-notificacion
+          uri: lb://ms-notificacion
+          predicates:
+            - Path=/api/notificaciones/**
+
+        - id: ms-auth
+          uri: lb://ms-auth
+          predicates:
+            - Path=/api/auth/**
+
+        - id: ms-pdf
+          uri: lb://ms-pdf
+          predicates:
+            - Path=/api/ocr/**
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:4200"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
